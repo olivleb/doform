@@ -20,8 +20,8 @@
     for(var i = 0; i<sStringArray.length; i++) {
       var sString = sStringArray[i];
       if (sString != "") {
-        sRowHtml = sRowHtml + "\n<label id='" + sString + "Label' class='" + sString + "Label'>" + sString + ":</label>";
-        sRowHtml = sRowHtml + "\n<input type='input' id='" + sString + "Input' name='" + sString + "' class='" + sString + "Input' title='" + sString + "'>";
+        sRowHtml = sRowHtml + "\n<label class='" + sString + "Label'>" + sString + ":</label>";
+        sRowHtml = sRowHtml + "\n<input type='input' name='" + sString + "' class='" + sString + "Input' title='" + sString + "'>";
         sRowCss = sRowCss + "\n." + sString + "Label {position:absolute;top:" + (40 * i + 20) + "px;left:160px;width:160px;text-align:left;}";
         sRowCss = sRowCss + "\n." + sString + "Input {position:absolute;top:" + (40 * i + 40) + "px;left:320px;width:160px;text-align:left;}";
         sRowMove = sRowMove + "\n<div id='" + sString + "Label' name = 'myDivs' class='" + sString + "Label' style='position:absolute;top:" + (40 * i + 20) + "px;left:160px;background-color:#606060;border-style:solid;'>" + sString + ":</div>";
@@ -49,25 +49,23 @@ function copySummaryToInputs() {
   for(var i=0;i<sStringArray.length;i++) {
     sRowArray=sStringArray[i].split("=");
     if (sRowArray.length == 2) {
-      document.getElementsByName(sRowArray[0] + "Input")[0].value = sRowArray[1].replace(/__/g,"\n").replace(/::/g,"=");
+      document.getElementsByName(sRowArray[0])[0].value = sRowArray[1].replace(/__/g,"\n").replace(/::/g,"=");
     }
   }
   document.getElementById('Summary').value = "";
 }
 function copyInputsToSummary() {
   var sReturn="";
-  // var myInputsArray = document.getElementById('divInputs').getElementsByTagName("*");
   var myInputsArray = document.formInputs.elements;
   for(var i=0;i<myInputsArray.length;i++) {
     if (myInputsArray[i].value != "") {
-      sReturn = sReturn + (sReturn==""?'':'\n') + myInputsArray[i].name.substr(0, myInputsArray[i].name.length - "Input".length) + "=" + myInputsArray[i].value.replace(/\n/g,"__").replace(/=/g,"::");
+      sReturn = sReturn + (sReturn==""?'':'\n') + myInputsArray[i].name + "=" + myInputsArray[i].value.replace(/\n/g,"__").replace(/=/g,"::");
     }
   }
   document.getElementById('Summary').value = sReturn;
 }
 function clearInputs() {
   if (confirm("Attention: tous les donn&eacutees du formulaire vont être effac&eacutees")) {
-    // var myInputsArray = document.getElementById('divInputs').elements;
     var myInputsArray = document.formInputs.elements;
     for(var i=0;i<myInputsArray.length;i++) {
       myInputsArray[i].value="";
