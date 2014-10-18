@@ -20,7 +20,7 @@
     for(var i = 0; i<sStringArray.length; i++) {
       var sString = sStringArray[i];
       if (sString != "") {
-        sRowHtml = sRowHtml + "\n<label id='" + sString + "Label' class='" + sString + "Label'>" + sString + ":<label>";
+        sRowHtml = sRowHtml + "\n<label id='" + sString + "Label' class='" + sString + "Label'>" + sString + ":</label>";
         sRowHtml = sRowHtml + "\n<input type='input' id='" + sString + "Input' name='" + sString + "' class='" + sString + "Input' title='" + sString + "'>";
         sRowCss = sRowCss + "\n." + sString + "Label {position:absolute;top:" + (40 * i + 20) + "px;left:160px;width:160px;text-align:left;}";
         sRowCss = sRowCss + "\n." + sString + "Input {position:absolute;top:" + (40 * i + 40) + "px;left:320px;width:160px;text-align:left;}";
