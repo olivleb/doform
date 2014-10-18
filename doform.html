@@ -1,0 +1,282 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Do Form</title>
+  <script language='javascript'>
+  function generate() {
+    var sRowHtml = "";
+    var sRowCss = "";
+    var sRowMove = "";
+    var sHeader1 = document.getElementById('Header1Id').value;
+    var sHeader2 = document.getElementById('Header2Id').value;
+    var sCssDeclare = "<link rel=\u0022stylesheet\u0022 type=\u0022text/css\u0022 media=\u0022screen,print\u0022; href=\u0022" + document.getElementById('NameId').value + ".css\u0022>";
+    var sFooter="\n</form>\n</body>\n</html>";
+    var sMoveHeader1 = document.getElementById('MoveHeader1Id').value;
+    var sMoveHeader2 = document.getElementById('MoveHeader2Id').value;
+    var sMoveFooter = "\n</body>\n</html>";
+    var sStringList = document.getElementById('ListId').value;
+    sStringArray = sStringList.split('\n');
+    for(var i = 0; i<sStringArray.length; i++) {
+      var sString = sStringArray[i];
+      if (sString != "") {
+        sRowHtml = sRowHtml + "\n<input type='input' name='" + sString + "' class='" + sString + "' title='" + sString + "'>";
+        sRowCss = sRowCss + "\n." + sString + " {position:absolute;top:" + (10 * i) + "px;left:300px;width:160px;text-align:left;}";
+        sRowMove = sRowMove + "\n<div id='" + sString + "' name = 'myDivs' class='" + sString + "' style='position:absolute;top:" + (10 * i) + "px;left:300px;background-color:#606060;'>" + sString + "</div>";
+      }
+    }
+    document.getElementById('Html With External Css').value = sHeader1 + sCssDeclare + sHeader2 + sRowHtml + sFooter;
+    document.getElementById('External Css').value = sRowCss;
+    document.getElementById('Position Manip').value = sMoveHeader1 + sCssDeclare + sMoveHeader2 + sRowMove + sMoveFooter;
+  }
+  </script>
+  </head>
+  <body>
+  <textarea id='Header1Id' style='display:none;'>
+&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=utf-8&quot;&gt;
+  </textarea>
+  <textarea id='Header2Id' style='display:none;'>
+&lt;script language='javascript'&gt;
+function copySummaryToInputs() {
+  var sString = document.getElementById('Summary').value;
+  sStringArray = sString.split('\n');
+  for(var i=0;i<sStringArray.length;i++) {
+    sRowArray=sStringArray[i].split("=");
+    if (sRowArray.length == 2) {
+      document.getElementsByName(sRowArray[0])[0].value = sRowArray[1].replace(/__/g,"\n").replace(/::/g,"=");
+    }
+  }
+  document.getElementById('Summary').value = "";
+}
+function copyInputsToSummary() {
+  var sReturn="";
+  // var myInputsArray = document.getElementById('divInputs').getElementsByTagName("*");
+  var myInputsArray = document.formInputs.elements;
+  for(var i=0;i<myInputsArray.length;i++) {
+    if (myInputsArray[i].value != "") {
+      sReturn = sReturn + (sReturn==""?'':'\n') + myInputsArray[i].name + "=" + myInputsArray[i].value.replace(/\n/g,"__").replace(/=/g,"::");
+    }
+  }
+  document.getElementById('Summary').value = sReturn;
+}
+function clearInputs() {
+  if (confirm("Attention: tous les donn&eacutees du formulaire vont être effac&eacutees")) {
+    // var myInputsArray = document.getElementById('divInputs').elements;
+    var myInputsArray = document.formInputs.elements;
+    for(var i=0;i<myInputsArray.length;i++) {
+      myInputsArray[i].value="";
+    }
+  }
+}
+&lt;/script&gt;
+&lt;style media="screen"&gt;
+.technicalframe {position:fixed; top:50%; right: 1%; border-style: groove; padding: 10px; background-color:infobackground;}
+&lt;/style&gt;
+&lt;style media="print"&gt;
+.technicalframe {display:none;}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div class='technicalframe'&gt;
+&lt;input type='button' value='Form-&gt;Text' onClick='copyInputsToSummary();'&gt;
+&lt;input type='button' value='Text-&gt;Form' onClick='copySummaryToInputs();'&gt;
+&lt;input type='button' value='Vider Form' onClick='clearInputs();'&gt;
+&lt;textarea id='Summary' class='Summary' title='Summary'&gt;&lt;/textarea&gt;
+&lt;/div&gt;
+&lt;form name='formInputs'&gt;
+</textarea>
+
+
+<textarea id='MoveHeader1Id' style='display:none;'>
+&lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv="content-type" content="text/html; charset=utf-8"&gt;
+</textarea>
+<textarea id='MoveHeader2Id' style='display:none;'>
+&lt;script language="JavaScript"&gt;
+
+var ie = (document.all)? true:false;
+var ns4 = (document.layers)? true:false;
+var ns6 = (document.getElementById)? true:false;
+
+var myCurrentDiv = null;
+var bDoResize = false;
+
+//Init des variables,des Divs-Layers, et du onmousedown
+// Fonction appel?e sur le onLoad du Body
+function InitOnMouseDown() {
+  var myArray=document.getElementsByName("myDivs");
+  for (i=0;i&lt;myArray.length;i++) {
+    var myDiv=myArray[i];
+    if (ie) {
+      myDiv.onmousedown=InitOnMouseMoveAndUp;
+    } else if (ns4) {
+      document.captureEvents(Event.MOUSEDOWN);
+      document.onmousedown=InitOnMouseMoveAndUp;
+    } else if (ns6) {
+      myDiv.addEventListener("mousedown",InitOnMouseMoveAndUp, false);
+    }
+  }
+}
+// Param?trage du d?placement des Divs-Layers et des onmousemove & onmouseup pendant le onmousedown
+// le (e) indique au programme qu'il utilise les ?venements.
+// Fonction appel?e sur le mousedown de chaque Div
+function InitOnMouseMoveAndUp(e) {
+  if (myCurrentDiv==null) {
+    myCurrentDiv=this;
+  }
+  if (ie) {
+    window.lastX=event.clientX;
+    window.lastY=event.clientY;
+    bDoResize = (window.lastX &gt; parseInt(myCurrentDiv.style.left) + parseInt(myCurrentDiv.style.width - 4)) && (window.lastY &gt; parseInt(myCurrentDiv.style.top) + parseInt(myCurrentDiv.style.height) - 4)
+    document.onmousemove=MoveDiv;
+    document.onmouseup=ClearOnMouseMove;
+  } else if (ns4) {
+    window.lastX=e.pageX;
+    window.lastY=e.pageY;
+    bDoResize = (window.lastX &gt; parseInt(myCurrentDiv.left) + parseInt(myCurrentDiv.width) - 4) && (window.lastY &gt; parseInt(myCurrentDiv.top) + parseInt(myCurrentDiv.height) - 4)
+    document.captureEvents(Event.MOUSEMOVE)
+    document.onmousemove=MoveDiv;
+    document.captureEvents(Event.MOUSEUP)
+    document.onmouseup=ClearOnMouseMove;
+  } else if (ns6) {
+    window.lastX=e.clientX;
+    window.lastY=e.clientY;
+    bDoResize = (window.lastX &gt; parseInt(myCurrentDiv.style.left) + parseInt(myCurrentDiv.offsetWidth) - 4) && (window.lastY &gt; parseInt(myCurrentDiv.style.top) + parseInt(myCurrentDiv.offsetHeight) - 4)
+    window.onmousemove=MoveDiv;
+    window.onmouseup=ClearOnMouseMove;
+  }
+}
+// D?placement des Divs-Layers
+// Fonction appel?e sur le onMouseMove du document
+function MoveDiv(e) {
+  if (ie) {
+    // Calcul de l'?cart de position de la souris
+    var iDeltaX=event.clientX-window.lastX;
+    var iDeltaY=event.clientY-window.lastY;
+    if (bDoResize) {
+      myCurrentDiv.style.width = parseInt(myCurrentDiv.style.width)+iDeltaX;
+      myCurrentDiv.style.height = parseInt(myCurrentDiv.style.height)+iDeltaY;
+    } else {
+      //R?cup?ration de la position du div et ajout de l'?cart de position de la souris
+      var iNewX = parseInt(myCurrentDiv.style.left)+iDeltaX;
+      var iNewY = parseInt(myCurrentDiv.style.top)+iDeltaY;
+      // Assignation des nouvelles coordonn?es au div
+      myCurrentDiv.style.left=iNewX+"px";
+      myCurrentDiv.style.top=iNewY+"px";
+    }
+    //Assignation de l'ancienne position de la souris
+    window.lastX=event.clientX;
+    window.lastY=event.clientY;
+  } else if (ns4) {
+    // Calcul de l'?cart de position de la souris
+    var iDeltaX=e.pageX-window.lastX;
+    var iDeltaY=e.pageY-window.lastY;
+    if (bDoResize) {
+      myCurrentDiv.width = parseInt(myCurrentDiv.width)+iDeltaX;
+      myCurrentDiv.height = parseInt(myCurrentDiv.height)+iDeltaY;
+    } else {
+      //R?cup?ration de la position du div et ajout de l'?cart de position de la souris
+      var iNewX = parseInt(myCurrentDiv.left)+iDeltaX;
+      var iNewY = parseInt(myCurrentDiv.top)+iDeltaY;
+      // Assignation des nouvelles coordonn?es au div
+      myCurrentDiv.left=iNewX;
+      myCurrentDiv.top=iNewY;
+    }
+    //Assignation de l'ancienne position de la souris
+    window.lastX=e.pageX;
+    window.lastY=e.pageY;
+  } else if (ns6) {
+    // Calcul de l'?cart de position de la souris
+    var iDeltaX=e.clientX-window.lastX;
+    var iDeltaY=e.clientY-window.lastY;
+    if (bDoResize) {
+      myCurrentDiv.style.width = (parseInt(myCurrentDiv.offsetWidth)+iDeltaX) + "px";
+      myCurrentDiv.style.height = (parseInt(myCurrentDiv.offsetHeight)+iDeltaY) + "px";
+    } else {
+      //R?cup?ration de la position du div et ajout de l'?cart de position de la souris
+      var iNewX = parseInt(myCurrentDiv.style.left)+iDeltaX;
+      var iNewY = parseInt(myCurrentDiv.style.top)+iDeltaY;
+      // Assignation des nouvelles coordonn?es au div
+      myCurrentDiv.style.left=iNewX+"px";
+      myCurrentDiv.style.top=iNewY+"px";
+    }
+    //Assignation de l'ancienne position de la souris
+    window.lastX=e.clientX;
+    window.lastY=e.clientY;
+  } 
+}
+function ClearOnMouseMove(e) {
+  myCurrentDiv=null;
+  //R?initialisation du onmousemove
+  if (ie || ns4) {
+    document.onmousemove=null;
+  } else if (ns6) {
+    window.onmousemove=null;
+  }
+}
+
+function copySummaryToInputs() {
+  var sString = document.getElementById('CssSummary').value;
+  // Suppression de tous les espaces
+  sString = sString.replace(/ +/g,'');
+  var sStringArray = sString.split('\n');
+  for(var i=0;i&lt;sStringArray.length;i++) {
+    var sRow = sStringArray[i];
+    // Suppression des . initiaux
+    sRow = sRow.replace(/^\./g,'');
+    // Suppression des } finaux
+    sRow = sRow.replace(/}$/g,'');
+    var sRowArray = sRow.split("{");
+    var sClassName = sRowArray[0];
+    var sKeyArray = sRowArray[1].split(";");
+    for(var j=0;j&lt;sKeyArray.length;j++) {
+      sCaractArray = sKeyArray[j].split(":");
+      switch (sCaractArray[0].toLowerCase()) {
+        case "top": document.getElementById(sClassName).style.top=sCaractArray[1]; break;
+        case "left": document.getElementById(sClassName).style.left=sCaractArray[1]; break;
+        case "height": document.getElementById(sClassName).style.height=sCaractArray[1]; break;
+        case "width": document.getElementById(sClassName).style.width=sCaractArray[1]; break;
+      }
+    }
+  }
+  document.getElementById('CssSummary').value = "";
+}
+function copyInputsToSummary() {
+  var sReturn="";
+  // var myInputsArray = document.getElementById('divInputs').getElementsByTagName("*");
+  var myInputsArray = document.getElementsByName("myDivs");
+  for(var i=0;i&lt;myInputsArray.length;i++) {
+    // .Race {position:absolute;top:213px;left:70px;width:140px;text-align:left;}
+    sReturn = sReturn + (sReturn==""?'':'\n') + "." + myInputsArray[i].id + " {position:absolute;"
+    + "top:" + myInputsArray[i].style.top + ";"
+    + "left:" + myInputsArray[i].style.left + ";"
+    + "height:" + myInputsArray[i].offsetHeight + ";"
+    + "width:" + myInputsArray[i].offsetWidth + ";"
+    + "}";
+  }
+  document.getElementById('CssSummary').value = sReturn;
+}
+
+&lt;/script&gt;
+&lt;/head&gt;
+&lt;body onload="InitOnMouseDown()"&gt;
+&lt;div style='position:fixed; top:50%; right: 1%; border-style: groove; padding: 10px; background-color:infobackground;'&gt;
+&lt;input type='button' value='Text-&gt;Form' onClick='copySummaryToInputs();'&gt;
+&lt;input type='button' value='Form-&gt;Text' onClick='copyInputsToSummary();'&gt;
+&lt;textarea id='CssSummary' class='CssSummary' title='CssSummary'&gt;&lt;/textarea&gt;
+&lt;/div&gt;
+</textarea>
+
+  Name: <input type='input' id='NameId'><br>
+  List<br><textarea id='ListId'></textarea><br>
+  <input type='button' value='Generate' onClick='generate();'><br>
+  Html With External Css<br><textarea id='Html With External Css'></textarea><br>
+  External Css<br><textarea id='External Css'></textarea><br>
+  Position Manip<br><textarea id='Position Manip'></textarea><br>
+  </body>
+</html>
